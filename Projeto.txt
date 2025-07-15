@@ -1,0 +1,26 @@
+#Desafio AWS CICD com Testes Automatizados e Staging:
+Uma equipe DevOps de uma empresa de varejo deseja configurar um pipeline CICD que implemente o código 
+mais recente em um ambiente de staging antes de realizar a implantação em produção. Além disso, o 
+pipeline deve executar uma suíte de testes funcionais automatizados no ambiente de staging, que 
+normalmente leva mais de duas horas para ser concluída. O código é gerenciado no CodeCommit.
+Tarefa: Crie um pipeline no CodePipeline com as seguintes etapas:
+Um estágio inicial que:
+Implante automaticamente o código da branch master do CodeCommit em um ambiente de staging utilizando 
+o CodeDeploy.
+Um estágio intermediário que:
+Invoque uma construção no CodeBuild para executar a suíte de testes funcionais no ambiente de staging.
+Um estágio final que:
+Se os testes forem aprovados, implante automaticamente a aplicação no ambiente de produção.
+Certifique-se de configurar notificações para erros no pipeline e de que as implantações só ocorram em
+ produção após a aprovação dos testes. Verifique se o pipeline opera eficientemente, mesmo com a
+  execução prolongada dos testes.
+
+  - Criar o repositorio no github
+  - Suba uma instancia EC2
+  - Implemente uma aplicação basica
+  - Verifique testes suíte de testes funcionais automatizados
+  - Criar a Pipeline 
+
+
+- APlicação api flask que adicionar usuarios
+
