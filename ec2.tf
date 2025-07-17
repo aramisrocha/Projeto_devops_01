@@ -3,7 +3,8 @@ resource "aws_instance" "flask_ec2" {
   ami                    = "ami-0c55b159cbfafe1f0" # Amazon Linux 2
   instance_type          = "t2.micro"
   key_name               = aws_key_pair.ec2_key.key_name
-  security_groups        = [aws_security_group.flask_sg.name]
+  subnet_id              = aws_subnet.subnet_a.id
+  security_groups        = [aws_security_group.ec2_sg.name]
   associate_public_ip_address = true
 
   user_data = <<-EOF
@@ -28,7 +29,7 @@ resource "aws_instance" "flask_ec2" {
     connection {
       type        = "ssh"
       user        = "ec2-user"
-      private_key = file("~/.ssh/minha-chave-ec2.pe")
+      private_key = tls_private_key.ec2_key.private_key_pem
       host        = self.public_ip
     }
   }
@@ -42,7 +43,7 @@ resource "aws_instance" "flask_ec2" {
 resource "aws_security_group" "ec2_sg" {
   name        = "ec2_sg"
   description = "Allow SSH, HTTP, HTTPS and ICMP"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = aws_vpc.Devops_01.id
 
   # SSH
   ingress {
