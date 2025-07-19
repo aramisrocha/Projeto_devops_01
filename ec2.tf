@@ -1,10 +1,11 @@
 
 resource "aws_instance" "flask_ec2" {
-  ami                    = "ami-0c55b159cbfafe1f0" # Amazon Linux 2
+  ami                    = "ami-0eb9d6fc9fab44d24" # Amazon Linux 2
   instance_type          = "t2.micro"
   key_name               = aws_key_pair.ec2_key.key_name
   subnet_id              = aws_subnet.subnet_a.id
-  security_groups        = [aws_security_group.ec2_sg.name]
+  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+  #security_groups        = [aws_security_group.ec2_sg.name]
   associate_public_ip_address = true
 
   user_data = <<-EOF
@@ -13,7 +14,28 @@ resource "aws_instance" "flask_ec2" {
               yum install -y python3 git
               pip3 install flask
               mkdir -p /opt/flaskapp
+              sudo chown ec2-user:ec2-user /opt/flaskapp
+              sudo chmod 777 /opt/flaskapp
               EOF
+
+  connection {
+    type        = "ssh"
+    user        = "ec2-user"
+    private_key = tls_private_key.ec2_key.private_key_pem
+    host        = self.public_ip
+  }
+ 
+  provisioner "remote-exec" {
+    inline = [
+      "sudo yum update -y",
+      "pip3 install flask",
+      "sudo yum install -y python3",
+      "sudo python3 -m ensurepip --upgrade",
+      "sudo mkdir -p /opt/flaskapp",
+      "sudo chown ec2-user:ec2-user /opt/flaskapp",
+      "sudo chmod 755 /opt/flaskapp"
+  ]
+ }
 
   provisioner "file" {
     source      = "app/app.py"
@@ -26,12 +48,6 @@ resource "aws_instance" "flask_ec2" {
       "nohup python3 app.py > app.log 2>&1 &"
     ]
 
-    connection {
-      type        = "ssh"
-      user        = "ec2-user"
-      private_key = tls_private_key.ec2_key.private_key_pem
-      host        = self.public_ip
-    }
   }
 
   tags = {
@@ -69,6 +85,12 @@ resource "aws_security_group" "ec2_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    from_port   = 5000
+    to_port     = 5000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
   # ICMP (ping)
   ingress {
     from_port   = -1
