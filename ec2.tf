@@ -8,16 +8,6 @@ resource "aws_instance" "flask_ec2" {
   #security_groups        = [aws_security_group.ec2_sg.name]
   associate_public_ip_address = true
 
-  user_data = <<-EOF
-              #!/bin/bash
-              yum update -y
-              yum install -y python3 git
-              pip3 install flask
-              mkdir -p /opt/flaskapp
-              sudo chown ec2-user:ec2-user /opt/flaskapp
-              sudo chmod 777 /opt/flaskapp
-              EOF
-
   connection {
     type        = "ssh"
     user        = "ec2-user"
@@ -27,13 +17,16 @@ resource "aws_instance" "flask_ec2" {
  
   provisioner "remote-exec" {
     inline = [
+      "echo Instalando pacotes...",
       "sudo yum update -y",
+      "sudo yum install -y python3-pip",
       "pip3 install flask",
       "sudo yum install -y python3",
       "sudo python3 -m ensurepip --upgrade",
       "sudo mkdir -p /opt/flaskapp",
       "sudo chown ec2-user:ec2-user /opt/flaskapp",
-      "sudo chmod 755 /opt/flaskapp"
+      "sudo chmod 755 /opt/flaskapp",
+      "cd /opt/flaskapp && nohup python3 app.py > app.log 2>&1 & "
   ]
  }
 
@@ -44,7 +37,9 @@ resource "aws_instance" "flask_ec2" {
 
   provisioner "remote-exec" {
     inline = [
+      "echo Executando app...",
       "cd /opt/flaskapp",
+      "sleep 30",
       "nohup python3 app.py > app.log 2>&1 &"
     ]
 
