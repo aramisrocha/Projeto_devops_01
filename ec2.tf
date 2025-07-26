@@ -38,9 +38,8 @@ resource "aws_instance" "flask_ec2" {
   provisioner "remote-exec" {
     inline = [
       "echo Executando app...",
-      "cd /opt/flaskapp",
       "sleep 30",
-      "nohup python3 app.py > app.log 2>&1 &"
+      "/usr/bin/nohup /usr/bin/python3 /opt/flaskapp/app.py > app.log 2>&1 &"
     ]
 
   }

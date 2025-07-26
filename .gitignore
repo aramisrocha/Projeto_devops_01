@@ -16,3 +16,6 @@ terraform.lock.hcl
 *.ppk
 
 minha-chave-ec2.pem
+
+#Pasta de imagens 
+imagens/
