@@ -5,12 +5,13 @@ phases:
     runtime-versions:
       python: 3.10
     commands:
-      - pip install -r requirements.txt
-      - pip install pytest
+      - echo "Instalando dependências..."
+      - pip install -r app/requirements.txt
   build:
     commands:
-      - echo "Running tests..."
-      - pytest test_app.py
+      - echo "Executando testes unitários..."
+      - export PYTHONPATH=app
+      - pytest app/test_app.py
 artifacts:
   files:
     - '**/*'
