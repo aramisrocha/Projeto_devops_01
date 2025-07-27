@@ -20,13 +20,12 @@ resource "aws_instance" "flask_ec2" {
       "echo Instalando pacotes...",
       "sudo yum update -y",
       "sudo yum install -y python3-pip",
-      "pip3 install flask",
+      "sudo pip3 install flask",
       "sudo yum install -y python3",
       "sudo python3 -m ensurepip --upgrade",
       "sudo mkdir -p /opt/flaskapp",
       "sudo chown ec2-user:ec2-user /opt/flaskapp",
-      "sudo chmod 755 /opt/flaskapp",
-      "cd /opt/flaskapp && nohup python3 app.py > app.log 2>&1 & "
+      "sudo chmod 777 /opt/flaskapp"
   ]
  }
 
@@ -35,14 +34,18 @@ resource "aws_instance" "flask_ec2" {
     destination = "/opt/flaskapp/app.py"
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "echo Executando app...",
-      "sleep 30",
-      "/usr/bin/nohup /usr/bin/python3 /opt/flaskapp/app.py > app.log 2>&1 &"
-    ]
+  provisioner "file" {
+    source      = "startup.sh"
+    destination = "/home/ec2-user/startup.sh"
+}
 
-  }
+   provisioner "remote-exec" {
+     inline = [
+       "chmod +x /home/ec2-user/startup.sh",
+       "sudo /home/ec2-user/startup.sh"
+  ]
+}
+
 
   tags = {
     Name = "FlaskAppEC2"
