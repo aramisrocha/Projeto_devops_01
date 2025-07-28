@@ -35,6 +35,22 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
+resource "aws_eip" "nat_eip" {
+  #vpc = true
+  tags = {
+    Name = "NatEIP"
+  }
+}
+
+resource "aws_nat_gateway" "nat_gw" {
+  allocation_id = aws_eip.nat_eip.id
+  subnet_id     = aws_subnet.subnet_a.id
+  tags = {
+    Name = "MainNATGateway"
+  }
+  depends_on = [aws_internet_gateway.igw]
+}
+
 # Route Table
 resource "aws_route_table" "rt" {
   vpc_id = aws_vpc.Devops_01.id
@@ -56,7 +72,27 @@ resource "aws_route_table_association" "a" {
   route_table_id = aws_route_table.rt.id
 }
 
+#resource "aws_route_table_association" "b" {
+#  subnet_id      = aws_subnet.subnet_b.id
+#  route_table_id = aws_route_table.rt.id
+#}
+
+# Route Table
+resource "aws_route_table" "rtp" {
+  vpc_id = aws_vpc.Devops_01.id
+  tags = {
+    Name = "Route_private"
+  }
+}
+
 resource "aws_route_table_association" "b" {
-  subnet_id      = aws_subnet.subnet_b.id
-  route_table_id = aws_route_table.rt.id
+   subnet_id      = aws_subnet.subnet_b.id
+   route_table_id = aws_route_table.rtp.id
+}
+
+
+resource "aws_route" "default_route_private" {
+  route_table_id         = aws_route_table.rtp.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_nat_gateway.nat_gw.id
 }
