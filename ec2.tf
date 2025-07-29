@@ -1,3 +1,34 @@
+resource "aws_iam_role" "codedeploy_role" {
+  name = "ec2_codedeploy_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      },
+      Action = "sts:AssumeRole"
+    }]
+  })
+}
+
+
+
+
+resource "aws_iam_role_policy_attachment" "codedeploy_attach" {
+  role       = aws_iam_role.codedeploy_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforAWSCodeDeploy"
+}
+
+
+resource "aws_iam_instance_profile" "codedeploy_profile" {
+  name = "ec2_codedeploy_instance_profile"
+  role = aws_iam_role.codedeploy_role.name
+}
+
+
+
 
 resource "aws_instance" "flask_ec2" {
   ami                    = "ami-0eb9d6fc9fab44d24" # Amazon Linux 2
@@ -7,6 +38,7 @@ resource "aws_instance" "flask_ec2" {
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
   #security_groups        = [aws_security_group.ec2_sg.name]
   associate_public_ip_address = true
+  iam_instance_profile   = aws_iam_instance_profile.codedeploy_profile.name
 
   connection {
     type        = "ssh"
