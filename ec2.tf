@@ -46,6 +46,21 @@ resource "aws_instance" "flask_ec2" {
   ]
 }
 
+  provisioner "remote-exec" {
+     inline = [
+       "echo Instalando o agente do CodeDeploy...",
+       "sudo yum update -y",
+       "sudo yum install -y ruby wget",
+       "cd /home/ec2-user",
+       "wget https://aws-codedeploy-sa-east-1.s3.amazonaws.com/latest/install",
+       "chmod +x ./install",
+       "sudo ./install auto",
+       "sudo systemctl enable codedeploy-agent",
+       "sudo systemctl start codedeploy-agent"
+  ]
+}
+
+
 
   tags = {
     Name = "FlaskAppEC2"
