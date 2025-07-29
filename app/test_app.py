@@ -19,3 +19,11 @@ def test_inverter_texto(cliente):
     resposta = cliente.post("/inverter", json={"texto": "OpenAI"})
     assert resposta.status_code == 200
     assert resposta.get_json()["resultado"] == "IAnepO"
+
+# Testes de Integração
+
+
+#  Testes de Contrato
+
+
+# Testes de Validação de Erros

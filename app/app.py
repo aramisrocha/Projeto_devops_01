@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
-
+# Testando o codigo 
 @app.route("/soma", methods=["GET"])
 def soma():
     try:
@@ -19,5 +19,3 @@ def inverter():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
-
-#testando03
