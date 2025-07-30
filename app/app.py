@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
-# Testando o codigo 02
+# Testando o codigo 03
 @app.route("/soma", methods=["GET"])
 def soma():
     try:

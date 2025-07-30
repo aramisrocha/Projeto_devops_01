@@ -3,18 +3,30 @@ os: linux
 files:
   - source: /app
     destination: /opt/flaskapp
+
 permissions:
+  # Permissões para a aplicação
   - object: /opt/flaskapp
     pattern: "**"
     owner: ec2-user
     group: ec2-user
     mode: 755
+
+  # Permissões para os scripts do CodeDeploy
+  - object: .
+    pattern: "*.sh"
+    owner: ec2-user
+    group: ec2-user
+    mode: 755
+
 hooks:
   ApplicationStop:
     - location: stop_app.sh
       timeout: 60
       runas: ec2-user
+
   ApplicationStart:
     - location: startup.sh
       timeout: 300
       runas: ec2-user
+
