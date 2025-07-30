@@ -3,6 +3,10 @@ os: linux
 files:
   - source: /app
     destination: /opt/flaskapp
+  - source: stop_app.sh
+    destination: /opt/flaskapp
+  - source: startup.sh
+    destination: /opt/flaskapp   
 
 permissions:
   # Permissões para a aplicação
