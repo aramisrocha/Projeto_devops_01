@@ -7,11 +7,26 @@ phases:
     commands:
       - echo "Instalando dependências..."
       - pip install -r app/requirements.txt
+      - pip install pytest jsonschema
   build:
     commands:
-      - echo "Executando testes unitários..."
+      - echo "========== INICIANDO TESTES =========="
       - export PYTHONPATH=app
-      - pytest app/test_app.py
+
+      - echo "🔹 Executando testes unitários..."
+      - pytest app/test_app.py -k "test_soma_ok or test_soma_invalida or test_inverter_texto" --maxfail=1 --disable-warnings -q
+
+      - echo "🔹 Executando testes de integração..."
+      - pytest app/test_app.py -k "test_fluxo_completo" --maxfail=1 --disable-warnings -q
+
+      - echo "🔹 Executando testes de contrato..."
+      - pytest app/test_app.py -k "test_soma_contrato" --maxfail=1 --disable-warnings -q
+
+      - echo "🔹 Executando testes de validação de erro..."
+      - pytest app/test_app.py -k "test_soma_parametro_faltando or test_inverter_sem_json" --maxfail=1 --disable-warnings -q
+
+      - echo "✅ Todos os testes foram executados."
 artifacts:
   files:
     - '**/*'
+
