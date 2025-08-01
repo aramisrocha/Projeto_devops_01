@@ -5,11 +5,15 @@ app = Flask(__name__)
 @app.route("/soma", methods=["GET"])
 def soma():
     try:
-        a = float(request.args.get("a", 0))
-        b = float(request.args.get("b", 0))
+        if "a" not in request.args or "b" not in request.args:
+            return jsonify({"erro": "Parâmetro faltando."}), 400
+
+        a = float(request.args.get("a"))
+        b = float(request.args.get("b"))
         return jsonify({"resultado": a + b})
     except ValueError:
         return jsonify({"erro": "Parâmetros inválidos."}), 400
+
 
 @app.route("/inverter", methods=["POST"])
 def inverter():
