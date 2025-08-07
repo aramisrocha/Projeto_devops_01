@@ -15,11 +15,13 @@ Certifique-se de configurar notificações para erros no pipeline e de que as im
  produção após a aprovação dos testes. Verifique se o pipeline opera eficientemente, mesmo com a
   execução prolongada dos testes.
 
-  - Criar o repositorio no github
-  - Suba uma instancia EC2
-  - Implemente uma aplicação basica
-  - Verifique testes suíte de testes funcionais automatizados
-  - Criar a Pipeline 
+Adicionar  Bandit
+Ajustar codedeploy
+Simular uma falha e pegar a evidência
+Implementar o Eventbridge junto com o SNS
+Fazer o Diagrama
+Publicar o projeto
+Tornar o Github publico
 
 
 - APlicação api flask que adicionar usuarios

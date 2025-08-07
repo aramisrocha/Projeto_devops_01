@@ -46,6 +46,16 @@ resource "aws_instance" "flask_ec2" {
     private_key = tls_private_key.ec2_key.private_key_pem
     host        = self.public_ip
   }
+
+    provisioner "file" {
+    source      = "app/app.py"
+    destination = "/opt/flaskapp/app.py"
+  }
+
+  provisioner "file" {
+    source      = "startup.sh"
+    destination = "/home/ec2-user/startup.sh"
+}
  
   provisioner "remote-exec" {
     inline = [
@@ -60,16 +70,6 @@ resource "aws_instance" "flask_ec2" {
       "sudo chmod 777 /opt/flaskapp"
   ]
  }
-
-  provisioner "file" {
-    source      = "app/app.py"
-    destination = "/opt/flaskapp/app.py"
-  }
-
-  provisioner "file" {
-    source      = "startup.sh"
-    destination = "/home/ec2-user/startup.sh"
-}
 
    provisioner "remote-exec" {
      inline = [

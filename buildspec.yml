@@ -25,6 +25,8 @@ phases:
       - echo "🔹 Executando testes de validação de erro..."
       - pytest app/test_erros.py
 
+      - echo "🔹 Executando testes de vunerabildiade de codigo pyhton"
+      - bandit -r app/ || true  
       - echo "✅ Todos os testes foram executados."
 artifacts:
   files:
