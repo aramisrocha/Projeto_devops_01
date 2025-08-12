@@ -47,10 +47,7 @@ resource "aws_instance" "flask_ec2" {
     host        = self.public_ip
   }
 
-    provisioner "file" {
-    source      = "app/app.py"
-    destination = "/opt/flaskapp/app.py"
-  }
+
 
   provisioner "file" {
     source      = "startup.sh"
@@ -70,6 +67,10 @@ resource "aws_instance" "flask_ec2" {
       "sudo chmod 777 /opt/flaskapp"
   ]
  }
+  provisioner "file" {
+    source      = "app/app.py"
+    destination = "/opt/flaskapp/"
+  }
 
    provisioner "remote-exec" {
      inline = [
@@ -109,22 +110,6 @@ resource "aws_security_group" "ec2_sg" {
   ingress {
     from_port   = 22
     to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # HTTP
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # HTTPS
-  ingress {
-    from_port   = 443
-    to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

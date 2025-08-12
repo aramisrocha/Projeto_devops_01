@@ -25,7 +25,7 @@ resource "aws_sns_topic" "codebuild_failures" {
 resource "aws_sns_topic_subscription" "email_sub" {
   topic_arn = aws_sns_topic.codebuild_failures.arn
   protocol  = "email"
-  endpoint  = "seuemail@exemplo.com"
+  endpoint  = "aramisoliveira@ymail.com"
 }
 
 resource "aws_iam_role" "eventbridge_role" {

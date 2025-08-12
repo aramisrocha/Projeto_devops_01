@@ -15,8 +15,8 @@ Certifique-se de configurar notificações para erros no pipeline e de que as im
  produção após a aprovação dos testes. Verifique se o pipeline opera eficientemente, mesmo com a
   execução prolongada dos testes.
 
-Adicionar  Bandit
-Ajustar codedeploy
+Adicionar  Bandit OK
+Ajustar codedeploy 
 Simular uma falha e pegar a evidência
 Implementar o Eventbridge junto com o SNS
 Fazer o Diagrama
