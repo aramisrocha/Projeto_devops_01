@@ -69,7 +69,7 @@ resource "aws_instance" "flask_ec2" {
  }
   provisioner "file" {
     source      = "app/app.py"
-    destination = "/opt/flaskapp/"
+    destination = "/opt/flaskapp/app.py"
   }
 
    provisioner "remote-exec" {
