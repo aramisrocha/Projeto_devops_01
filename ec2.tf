@@ -51,7 +51,12 @@ resource "aws_instance" "flask_ec2" {
 
   provisioner "file" {
     source      = "startup.sh"
-    destination = "/home/ec2-user/startup.sh"
+    destination = "/opt/flaskapp/startup.sh"
+}
+
+ provisioner "file" {
+    source      = "stop_app.sh"
+    destination = "/opt/flaskapp/stop_app.sh"
 }
  
   provisioner "remote-exec" {
@@ -74,8 +79,15 @@ resource "aws_instance" "flask_ec2" {
 
    provisioner "remote-exec" {
      inline = [
-       "chmod +x /home/ec2-user/startup.sh",
-       "sudo /home/ec2-user/startup.sh"
+       "chmod +x /opt/flaskapp/startup.sh",
+       "sudo /opt/flaskapp/startup.sh"
+  ]
+}
+
+   provisioner "remote-exec" {
+     inline = [
+       "chmod +x /opt/flaskapp/stop_app.sh",
+       "sudo /opt/flaskapp/stop_app.sh"
   ]
 }
 
