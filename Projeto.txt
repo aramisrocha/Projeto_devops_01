@@ -15,13 +15,10 @@ Certifique-se de configurar notificações para erros no pipeline e de que as im
  produção após a aprovação dos testes. Verifique se o pipeline opera eficientemente, mesmo com a
   execução prolongada dos testes.
 
-Adicionar  Bandit OK
-Ajustar codedeploy 
-Simular uma falha e pegar a evidência
-Implementar o Eventbridge junto com o SNS
-Fazer o Diagrama
-Publicar o projeto
-Tornar o Github publico
+AJustar o hook do appsepc
+Verificar porque o teste de vulnerabilidade nao esta parando o teste
+Verificar porque o eventbridge nao esta coletando mensagens
+
 
 
 - APlicação api flask que adicionar usuarios

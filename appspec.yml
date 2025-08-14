@@ -25,12 +25,12 @@ permissions:
 
 hooks:
   ApplicationStop:
-    - location: /opt/flaskapp/stop_app.sh
+    - location: stop_app.sh
       timeout: 60
-      runas: ec2-user
+      runas: root
 
   ApplicationStart:
-    - location: /opt/flaskapp/startup.sh
+    - location: startup.sh
       timeout: 300
-      runas: ec2-user
+      runas: root
 
