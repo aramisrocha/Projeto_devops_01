@@ -30,5 +30,6 @@ phases:
       - echo "✅ Todos os testes foram executados."
 artifacts:
   files:
-    - '**/*'
-
+    - appspec.yml
+    - app/**/*
+    - scripts/**/*
