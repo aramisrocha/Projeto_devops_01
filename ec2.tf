@@ -65,12 +65,12 @@ resource "aws_instance" "flask_ec2" {
   ]
  }
    provisioner "file" {
-     source      = "/scripts/startup.sh"
+     source      = "scripts/startup.sh"
      destination = "/opt/flaskapp/startup.sh"
 }
 
   provisioner "file" {
-    source      = "/scripts/stop_app.sh"
+    source      = "scripts/stop_app.sh"
     destination = "/opt/flaskapp/stop_app.sh"
 }
   provisioner "file" {
