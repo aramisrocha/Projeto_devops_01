@@ -17,6 +17,7 @@ EOF
 resource "aws_cloudwatch_event_target" "sns_target" {
   rule      = aws_cloudwatch_event_rule.codebuild_failed.name
   target_id = "send-to-sns"
+  role_arn  = aws_iam_role.eventbridge_role.arn
   arn       = aws_sns_topic.codebuild_failures.arn
 
   input_transformer {
@@ -84,9 +85,9 @@ resource "aws_iam_role_policy" "eventbridge_sns_policy" {
   })
 }
 
-resource "aws_cloudwatch_event_target" "sns_with_role" {
-  rule      = aws_cloudwatch_event_rule.codebuild_failed.name
-  target_id = "sns-target"
-  arn       = aws_sns_topic.codebuild_failures.arn
-  role_arn  = aws_iam_role.eventbridge_role.arn
-}
+#resource "aws_cloudwatch_event_target" "sns_with_role" {
+#  rule      = aws_cloudwatch_event_rule.codebuild_failed.name
+#  target_id = "sns-target"
+#  arn       = aws_sns_topic.codebuild_failures.arn
+#  role_arn  = aws_iam_role.eventbridge_role.arn
+#}
