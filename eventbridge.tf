@@ -12,10 +12,35 @@ resource "aws_cloudwatch_event_rule" "codebuild_failed" {
 EOF
 }
 
+
+# Filtrando a mensagem para enviar somente as informações necessarias 
 resource "aws_cloudwatch_event_target" "sns_target" {
   rule      = aws_cloudwatch_event_rule.codebuild_failed.name
   target_id = "send-to-sns"
   arn       = aws_sns_topic.codebuild_failures.arn
+
+  input_transformer {
+    input_paths = {
+      project   = "$.detail.project-name"
+      build_id  = "$.detail.build-id"
+      status    = "$.detail.build-status"
+      # ATENÇÃO: as fases ficam em additional-information.phases
+      # O índice 6 foi o da sua amostra (fase BUILD). Se variar, considere Lambda.
+      error     = "$.detail.additional-information.phases[6].phase-context[0]"
+      log_link  = "$.detail.additional-information.logs.deep-link"
+    }
+
+    input_template = <<EOT
+{
+  "title": "CodeBuild failure",
+  "status": <status>,
+  "project": <project>,
+  "build_id": <build_id>,
+  "error": <error>,
+  "logs": <log_link>
+}
+EOT
+  }
 }
 
 resource "aws_sns_topic" "codebuild_failures" {
