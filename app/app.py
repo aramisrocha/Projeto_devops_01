@@ -10,7 +10,7 @@ def soma():
 
         a = float(request.args.get("a"))
         b = float(request.args.get("b"))
-        return jsonify({"resultado": a + b})
+        return jsonify({"resultado": a + b +1})
     except ValueError:
         return jsonify({"erro": "Parâmetros inválidos."}), 400
 
