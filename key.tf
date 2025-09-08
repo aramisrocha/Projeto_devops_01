@@ -1,3 +1,4 @@
+# Abaixo todo o processo para a criação da key para o acesso a EC2
 resource "tls_private_key" "ec2_key" {
   algorithm = "RSA"
   rsa_bits  = 4096

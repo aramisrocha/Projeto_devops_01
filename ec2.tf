@@ -1,3 +1,4 @@
+# Criando a Role para o Cdedeploy
 resource "aws_iam_role" "codedeploy_role" {
   name = "ec2_codedeploy_role"
 
@@ -15,13 +16,13 @@ resource "aws_iam_role" "codedeploy_role" {
 
 
 
-
+# Associando a politica a role
 resource "aws_iam_role_policy_attachment" "codedeploy_attach" {
   role       = aws_iam_role.codedeploy_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforAWSCodeDeploy"
 }
 
-
+# Associando a role ao profile
 resource "aws_iam_instance_profile" "codedeploy_profile" {
   name = "ec2_codedeploy_instance_profile"
   role = aws_iam_role.codedeploy_role.name
@@ -29,14 +30,13 @@ resource "aws_iam_instance_profile" "codedeploy_profile" {
 
 
 
-
+# Codigo para a criação de uma instancia EC2
 resource "aws_instance" "flask_ec2" {
   ami                    = "ami-0eb9d6fc9fab44d24" # Amazon Linux 2
   instance_type          = "t2.micro"
   key_name               = aws_key_pair.ec2_key.key_name
   subnet_id              = aws_subnet.subnet_a.id
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
-  #security_groups        = [aws_security_group.ec2_sg.name]
   associate_public_ip_address = true
   iam_instance_profile   = aws_iam_instance_profile.codedeploy_profile.name
 
@@ -50,7 +50,7 @@ resource "aws_instance" "flask_ec2" {
 
 
 
- 
+ # Realizando a instalacao da aplicação e os requisitos necessarios
   provisioner "remote-exec" {
     inline = [
       "echo Instalando pacotes...",
@@ -90,7 +90,7 @@ resource "aws_instance" "flask_ec2" {
        "chmod +x /opt/flaskapp/stop_app.sh"
   ]
 }
-
+# Instalando o Codedeploy agente
   provisioner "remote-exec" {
      inline = [
        "echo Instalando o agente do CodeDeploy...",
@@ -112,7 +112,7 @@ resource "aws_instance" "flask_ec2" {
   }
 }
 
-
+# Criando o security group para conectar na aplicação e gerenciando do servidor
 resource "aws_security_group" "ec2_sg" {
   name        = "ec2_sg"
   description = "Allow SSH, HTTP, HTTPS and ICMP"

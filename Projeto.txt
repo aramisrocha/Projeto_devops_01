@@ -15,8 +15,9 @@ Certifique-se de configurar notificações para erros no pipeline e de que as im
  produção após a aprovação dos testes. Verifique se o pipeline opera eficientemente, mesmo com a
   execução prolongada dos testes.
 
-Verificar porque o teste de vulnerabilidade nao esta parando o teste
-Verificar porque o eventbridge nao esta coletando mensagens
+ # revisar todo o codigo 
+  Começar a documentação do projeto
+  Verificar por que ot este de segurança passa e nao é identificado como erros
 
 
 

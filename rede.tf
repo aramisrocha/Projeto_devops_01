@@ -8,7 +8,7 @@ resource "aws_vpc" "Devops_01" {
   }
 }
 
-# Subnets (em AZs diferentes)
+# Criação das duas Subnets para o ambiente, uma publica e outra privada
 resource "aws_subnet" "subnet_a" {
   vpc_id            = aws_vpc.Devops_01.id
   cidr_block        = "10.0.1.0/24"
@@ -42,6 +42,7 @@ resource "aws_eip" "nat_eip" {
   }
 }
 
+# Criando o nat_gateway para atribuir a tabela de rota da subnet privada
 resource "aws_nat_gateway" "nat_gw" {
   allocation_id = aws_eip.nat_eip.id
   subnet_id     = aws_subnet.subnet_a.id
@@ -51,7 +52,7 @@ resource "aws_nat_gateway" "nat_gw" {
   depends_on = [aws_internet_gateway.igw]
 }
 
-# Route Table
+# Tabela de rota para a rede privada
 resource "aws_route_table" "rt" {
   vpc_id = aws_vpc.Devops_01.id
   tags = {
@@ -72,12 +73,8 @@ resource "aws_route_table_association" "a" {
   route_table_id = aws_route_table.rt.id
 }
 
-#resource "aws_route_table_association" "b" {
-#  subnet_id      = aws_subnet.subnet_b.id
-#  route_table_id = aws_route_table.rt.id
-#}
 
-# Route Table
+# 
 resource "aws_route_table" "rtp" {
   vpc_id = aws_vpc.Devops_01.id
   tags = {
@@ -85,6 +82,7 @@ resource "aws_route_table" "rtp" {
   }
 }
 
+# Associação da tabela de rota 
 resource "aws_route_table_association" "b" {
    subnet_id      = aws_subnet.subnet_b.id
    route_table_id = aws_route_table.rtp.id

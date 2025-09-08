@@ -13,7 +13,7 @@ permissions:
     mode: 755
 
 hooks:
-  BeforeInstall:              # <= usar este no lugar de ApplicationStop
+  BeforeInstall:         
     - location: scripts/stop_app.sh
       timeout: 60
       runas: root
